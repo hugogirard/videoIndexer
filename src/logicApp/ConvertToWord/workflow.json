@@ -237,7 +237,7 @@
                 "inputs": {
                     "parameters": {
                         "containerName": "transcript",
-                        "blobName": ".docx",
+                        "blobName": "@{body('Parse_JSON_queue_message')?['name']}.docx",
                         "content": "@body('Populate_Microsoft_Word_template_transcription')"
                     },
                     "serviceProviderConfiguration": {
