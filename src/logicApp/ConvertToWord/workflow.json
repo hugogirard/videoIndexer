@@ -166,78 +166,10 @@
                                                     }
                                                 }
                                             }
-                                        },
-                                        "thumbnailId": {
-                                            "type": "string"
-                                        },
-                                        "detectSourceLanguage": {
-                                            "type": "boolean"
-                                        },
-                                        "languageAutoDetectMode": {
-                                            "type": "string"
-                                        },
-                                        "sourceLanguage": {},
-                                        "sourceLanguages": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "language": {},
-                                        "languages": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "indexingPreset": {
-                                            "type": "string"
-                                        },
-                                        "linguisticModelId": {
-                                            "type": "string"
-                                        },
-                                        "personModelId": {
-                                            "type": "string"
-                                        },
-                                        "isAdult": {
-                                            "type": "boolean"
-                                        },
-                                        "publishedUrl": {
-                                            "type": "string"
-                                        },
-                                        "publishedProxyUrl": {},
-                                        "viewToken": {
-                                            "type": "string"
                                         }
                                     },
                                     "required": [
-                                        "accountId",
-                                        "id",
-                                        "state",
-                                        "moderationState",
-                                        "reviewState",
-                                        "privacyMode",
-                                        "processingProgress",
-                                        "failureCode",
-                                        "failureMessage",
-                                        "externalId",
-                                        "externalUrl",
-                                        "metadata",
-                                        "insights",
-                                        "thumbnailId",
-                                        "detectSourceLanguage",
-                                        "languageAutoDetectMode",
-                                        "sourceLanguage",
-                                        "sourceLanguages",
-                                        "language",
-                                        "languages",
-                                        "indexingPreset",
-                                        "linguisticModelId",
-                                        "personModelId",
-                                        "isAdult",
-                                        "publishedUrl",
-                                        "publishedProxyUrl",
-                                        "viewToken"
+                                        "insights"
                                     ]
                                 }
                             },
