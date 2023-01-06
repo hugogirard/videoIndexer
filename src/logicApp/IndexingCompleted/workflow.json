@@ -1,0 +1,421 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Get_video": {
+                "type": "ServiceProvider",
+                "inputs": {
+                    "parameters": {
+                        "databaseId": "case",
+                        "containerId": "video",
+                        "itemId": "@variables('videoId')",
+                        "partitionKey": "@variables('videoId')"
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "AzureCosmosDB",
+                        "operationId": "ReadDocument",
+                        "serviceProviderId": "/serviceProviders/AzureCosmosDB"
+                    }
+                },
+                "runAfter": {
+                    "Initialize_variable_videoId": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Initialize_variable_accountId": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "accountId",
+                            "type": "string",
+                            "value": "@appsetting('VIDEO_INDEXER_ACCOUNT_ID')"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_variable_location_indexer": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Initialize_variable_getResultEndpoint": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "getResultVideoEndpoint",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_variable_languageVideo": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Initialize_variable_languageVideo": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "videoLanguage",
+                            "type": "string",
+                            "value": "@body('Parse_JSON_CosmosDB_document')?['language']"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_variable_accountId": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Initialize_variable_location_indexer": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "indexerLocation",
+                            "type": "string",
+                            "value": "@appsetting('WORKFLOWS_LOCATION_NAME')"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Parse_JSON_CosmosDB_document": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Initialize_variable_video": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "video",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_variable_getResultEndpoint": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Initialize_variable_videoId": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "videoId",
+                            "type": "string",
+                            "value": "@body('Parse_JSON_result_processing_Video')?['id']"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Parse_JSON_result_processing_Video": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Parse_JSON_CosmosDB_document": {
+                "type": "ParseJson",
+                "inputs": {
+                    "content": "@body('Get_video')?['content']",
+                    "schema": {
+                        "properties": {
+                            "_attachments": {
+                                "type": "string"
+                            },
+                            "_etag": {
+                                "type": "string"
+                            },
+                            "_rid": {
+                                "type": "string"
+                            },
+                            "_self": {
+                                "type": "string"
+                            },
+                            "_ts": {
+                                "type": "integer"
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "id": {
+                                "type": "string"
+                            },
+                            "language": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "publishedUrl": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "runAfter": {
+                    "Get_video": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Parse_JSON_result_processing_Video": {
+                "type": "ParseJson",
+                "inputs": {
+                    "content": "@triggerOutputs()['queries']",
+                    "schema": {
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "state": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "runAfter": {}
+            },
+            "if_video_processed": {
+                "type": "If",
+                "expression": {
+                    "and": [
+                        {
+                            "equals": [
+                                "@body('Parse_JSON_result_processing_Video')?['state']",
+                                "Processed"
+                            ]
+                        }
+                    ]
+                },
+                "actions": {
+                    "Compose_updated_document": {
+                        "type": "Compose",
+                        "inputs": {
+                            "description": "@{body('Parse_JSON_CosmosDB_document')?['description']}",
+                            "id": "@{body('Parse_JSON_output_insights')?['summarizedInsights']?['id']}",
+                            "language": "@{body('Parse_JSON_CosmosDB_document')?['language']}",
+                            "name": " @{body('Parse_JSON_CosmosDB_document')?['name']}",
+                            "publishedUrl": " @{body('Parse_JSON_CosmosDB_document')?['publishedUrl']}",
+                            "status": "Completed",
+                            "videoInsights": {
+                                "durationInSeconds": "@body('Parse_JSON_output_insights')?['summarizedInsights']?['duration']",
+                                "summarizedInsights": "@body('Parse_JSON_output_insights')?['summarizedInsights']",
+                                "videos": "@body('Parse_JSON_output_insights')?['videos']",
+                                "videosRanges": "@body('Parse_JSON_output_insights')?['videosRanges']"
+                            }
+                        },
+                        "runAfter": {
+                            "Parse_JSON_video": [
+                                "Succeeded"
+                            ]
+                        }
+                    },
+                    "Create_or_update_item": {
+                        "type": "ServiceProvider",
+                        "inputs": {
+                            "parameters": {
+                                "databaseId": "case",
+                                "containerId": "video",
+                                "item": "@outputs('Compose_updated_document')",
+                                "isUpsert": true
+                            },
+                            "serviceProviderConfiguration": {
+                                "connectionName": "AzureCosmosDB",
+                                "operationId": "CreateOrUpdateDocument",
+                                "serviceProviderId": "/serviceProviders/AzureCosmosDB"
+                            }
+                        },
+                        "runAfter": {
+                            "Compose_updated_document": [
+                                "Succeeded"
+                            ]
+                        }
+                    },
+                    "Get_Access_Token_Indexer_Video": {
+                        "type": "Http",
+                        "inputs": {
+                            "method": "POST",
+                            "uri": "@appsetting('VIDEO_INDEXER_GET_TOKEN_ENDPOINT')",
+                            "body": {
+                                "permissionType": "Reader",
+                                "scope": "Video",
+                                "videoId": "@{variables('videoId')}"
+                            },
+                            "authentication": {
+                                "type": "ManagedServiceIdentity"
+                            }
+                        },
+                        "runAfter": {}
+                    },
+                    "Get_video_Insights": {
+                        "type": "Http",
+                        "inputs": {
+                            "method": "GET",
+                            "uri": "@variables('getResultVideoEndpoint')",
+                            "queries": {
+                                "accessToken": "@body('Parse_access_token')?['accessToken']",
+                                "includeStreamingUrls": "false"
+                            }
+                        },
+                        "runAfter": {
+                            "Set_variable_getResultEndpoint": [
+                                "Succeeded"
+                            ]
+                        }
+                    },
+                    "Parse_JSON_output_insights": {
+                        "type": "ParseJson",
+                        "inputs": {
+                            "content": "@body('Get_video_Insights')",
+                            "schema": {
+                                "properties": {
+                                    "summarizedInsights": {
+                                        "properties": {
+                                            "duration": {
+                                                "properties": {
+                                                    "seconds": {
+                                                        "type": "integer"
+                                                    },
+                                                    "time": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "videos": {
+                                        "type": "array"
+                                    },
+                                    "videosRanges": {
+                                        "type": "array"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "runAfter": {
+                            "Get_video_Insights": [
+                                "Succeeded"
+                            ]
+                        }
+                    },
+                    "Parse_JSON_video": {
+                        "type": "ParseJson",
+                        "inputs": {
+                            "content": "@variables('video')",
+                            "schema": {
+                                "properties": {
+                                    "publishedUrl": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "runAfter": {
+                            "Set_variable_video": [
+                                "Succeeded"
+                            ]
+                        }
+                    },
+                    "Parse_access_token": {
+                        "type": "ParseJson",
+                        "inputs": {
+                            "content": "@body('Get_Access_Token_Indexer_Video')",
+                            "schema": {
+                                "properties": {
+                                    "accessToken": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "runAfter": {
+                            "Get_Access_Token_Indexer_Video": [
+                                "Succeeded"
+                            ]
+                        }
+                    },
+                    "Set_variable_getResultEndpoint": {
+                        "type": "SetVariable",
+                        "inputs": {
+                            "name": "getResultVideoEndpoint",
+                            "value": "@{concat('https://api.videoindexer.ai/',variables('indexerLocation'),'/Accounts/',variables('accountId'),'/Videos/',body('Parse_JSON_CosmosDB_document')?['id'],'/Index')}"
+                        },
+                        "runAfter": {
+                            "Parse_access_token": [
+                                "Succeeded"
+                            ]
+                        }
+                    },
+                    "Set_variable_video": {
+                        "type": "SetVariable",
+                        "inputs": {
+                            "name": "video",
+                            "value": "@first(body('Parse_JSON_output_insights')?['videos'])"
+                        },
+                        "runAfter": {
+                            "Parse_JSON_output_insights": [
+                                "Succeeded"
+                            ]
+                        }
+                    },
+                    "Send_message_transcript": {
+                        "type": "ServiceProvider",
+                        "inputs": {
+                            "parameters": {
+                                "entityName": "sbq-transcript",
+                                "message": {
+                                    "contentData": "@body('Parse_JSON_output_insights')"
+                                }
+                            },
+                            "serviceProviderConfiguration": {
+                                "connectionName": "serviceBus",
+                                "operationId": "sendMessage",
+                                "serviceProviderId": "/serviceProviders/serviceBus"
+                            }
+                        },
+                        "runAfter": {
+                            "Parse_JSON_output_insights": [
+                                "Succeeded"
+                            ]
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Initialize_variable_video": [
+                        "Succeeded"
+                    ]
+                }
+            }
+        },
+        "triggers": {
+            "manual": {
+                "type": "Request",
+                "kind": "Http",
+                "inputs": {}
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {}
+    },
+    "kind": "Stateful"
+}

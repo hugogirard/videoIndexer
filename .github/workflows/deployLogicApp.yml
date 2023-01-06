@@ -1,0 +1,68 @@
+name: Deploy Logic App
+
+on:
+  workflow_dispatch:
+  
+  push:
+    paths:
+      - "src/**"
+      - ".github/workflows/deployLogicApp.yml"
+
+env:
+  RG_NAME: ${{ secrets.RESOURCE_GROUP_NAME }}
+  LOGICAPP_PACKAGE_PATH: 'src/logicApp'
+
+jobs:
+  logic_app_build-deploy:
+
+    name: Build 
+    runs-on: ubuntu-latest
+    
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Package logic
+        run: | 
+          cd src/logicApp
+          mkdir -p output
+          zip -r ./output/logic.zip .
+
+      - name: Check dir
+        run: |
+          ls -la src/logicApp
+
+      - name: Login via Az module
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.AZURE_CREDENTIALS}}
+          enable-AzPSSession: true 
+
+      - name: Get publish Profile
+        id: publishprofile
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            $profile = Get-AzWebAppPublishingProfile `
+                -ResourceGroupName ${{ env.RG_NAME }} `
+                -Name ${{ secrets.LOGIC_APP_NAME }}
+            $profile = $profile.Replace("`r", "").Replace("`n", "")
+            Write-Output "::set-output name=profile::$profile"
+          azPSVersion: latest
+
+      - name: Deploy to Azure Logic App
+        uses: Azure/functions-action@v1.3.1
+        id: la
+        with:
+          app-name: ${{ env.RG_NAME }}
+          package: 'src/logicApp/output/logic.zip'
+          publish-profile: ${{steps.publishprofile.outputs.profile}}
+
+      - name: Swap parameter files 
+        id: params
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az functionapp deploy --resource-group ${{ env.RG_NAME }} --name ${{ secrets.LOGIC_APP_NAME }} --src-path  src/logicApp/azure.parameters.json --type static --target-path parameters.json          
+

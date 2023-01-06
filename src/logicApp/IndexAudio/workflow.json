@@ -1,0 +1,219 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Create_or_update_item_indexing_job_video": {
+                "type": "ServiceProvider",
+                "inputs": {
+                    "parameters": {
+                        "databaseId": "case",
+                        "containerId": "video",
+                        "item": "{\"id\":  \"@{body('Parse_POST_Video_HTTP_return')?['id']}\",\"language\": \"@{triggerBody()?['language']}\",\"description\": \"@{triggerBody()?['description']}\",\"name\":  \"@{triggerBody()?['name']}\",\"status\":\"In progress\", \"publishedUrl\": \"@{triggerBody()?['videoUrl']}\"}",
+                        "isUpsert": true
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "AzureCosmosDB",
+                        "operationId": "CreateOrUpdateDocument",
+                        "serviceProviderId": "/serviceProviders/AzureCosmosDB"
+                    }
+                },
+                "runAfter": {
+                    "Parse_POST_Video_HTTP_return": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Get_Access_Token_Indexer": {
+                "type": "Http",
+                "inputs": {
+                    "method": "POST",
+                    "uri": "@appsetting('VIDEO_INDEXER_GET_TOKEN_ENDPOINT')",
+                    "body": {
+                        "permissionType": "Owner",
+                        "scope": "Account"
+                    },
+                    "authentication": {
+                        "audience": "https://management.core.windows.net",
+                        "type": "ManagedServiceIdentity"
+                    }
+                },
+                "runAfter": {}
+            },
+            "Parse_POST_Video_HTTP_return": {
+                "type": "ParseJson",
+                "inputs": {
+                    "content": "@body('Upload_video_to_Video_Indexer')",
+                    "schema": {
+                        "properties": {
+                            "accountId": {
+                                "type": "string"
+                            },
+                            "created": {
+                                "type": "string"
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "durationInSeconds": {
+                                "type": "integer"
+                            },
+                            "externalId": {},
+                            "hasSourceVideoFile": {
+                                "type": "boolean"
+                            },
+                            "id": {
+                                "type": "string"
+                            },
+                            "indexingPreset": {
+                                "type": "string"
+                            },
+                            "isBase": {
+                                "type": "boolean"
+                            },
+                            "isOwned": {
+                                "type": "boolean"
+                            },
+                            "lastIndexed": {
+                                "type": "string"
+                            },
+                            "lastModified": {
+                                "type": "string"
+                            },
+                            "metadata": {},
+                            "moderationState": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "partition": {},
+                            "personModelId": {
+                                "type": "string"
+                            },
+                            "privacyMode": {
+                                "type": "string"
+                            },
+                            "processingProgress": {
+                                "type": "string"
+                            },
+                            "reviewState": {
+                                "type": "string"
+                            },
+                            "searchMatches": {
+                                "type": "array"
+                            },
+                            "sourceLanguage": {},
+                            "state": {
+                                "type": "string"
+                            },
+                            "streamingPreset": {
+                                "type": "string"
+                            },
+                            "thumbnailId": {
+                                "type": "string"
+                            },
+                            "thumbnailVideoId": {
+                                "type": "string"
+                            },
+                            "userName": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "runAfter": {
+                    "Upload_video_to_Video_Indexer": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Parse_access_token": {
+                "type": "ParseJson",
+                "inputs": {
+                    "content": "@body('Get_Access_Token_Indexer')",
+                    "schema": {
+                        "properties": {
+                            "accessToken": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "runAfter": {
+                    "Get_Access_Token_Indexer": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Response": {
+                "type": "Response",
+                "kind": "http",
+                "inputs": {
+                    "statusCode": 200,
+                    "body": {
+                        "description": "@{triggerBody()?['description']}",
+                        "id": "@{body('Parse_POST_Video_HTTP_return')?['id']}",
+                        "language": " @{triggerBody()?['language']}",
+                        "name": " @{triggerBody()?['name']}"
+                    }
+                },
+                "runAfter": {
+                    "Create_or_update_item_indexing_job_video": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Upload_video_to_Video_Indexer": {
+                "type": "Http",
+                "inputs": {
+                    "method": "POST",
+                    "uri": "@appsetting('VIDEO_INDEXER_UPLOAD_VIDEO')",
+                    "queries": {
+                        "accessToken": "@body('Parse_access_token')?['accessToken']",
+                        "callbackUrl": "@appsetting('LOGIC_APP_WEBHOOK')",
+                        "description": "@triggerBody()?['description']",
+                        "language": "@triggerBody()?['language']",
+                        "name": "@triggerBody()?['name']",
+                        "privacy": "Private",
+                        "videoUrl": "@triggerBody()?['videoUrl']"
+                    }
+                },
+                "runAfter": {
+                    "Parse_access_token": [
+                        "Succeeded"
+                    ]
+                }
+            }
+        },
+        "triggers": {
+            "manual": {
+                "type": "Request",
+                "kind": "Http",
+                "inputs": {
+                    "schema": {
+                        "properties": {
+                            "description": {
+                                "type": "string"
+                            },
+                            "language": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "videoUrl": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {}
+    },
+    "kind": "Stateful"
+}

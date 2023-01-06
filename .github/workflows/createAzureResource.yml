@@ -1,0 +1,59 @@
+name: Create Azure Resources
+
+on:  
+  push:
+    branches:
+      - "main"
+    paths:
+      - "bicep/**/*.bicep"
+      - ".github/workflows/createAzureResource.yml"
+    
+  workflow_dispatch:
+
+jobs:
+  create-azure-resources:
+
+    env:
+      DEPLOYMENT_NAME: indexer-deployment
+      LOCATION: ${{ secrets.LOCATION }}
+      RG_NAME: ${{ secrets.RESOURCE_GROUP_NAME }}
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      
+      - uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}      
+
+      - name: Validate that bicep builds
+        run: az bicep build -f main.bicep
+        working-directory: ./bicep
+
+      - name: deploy
+        id: createResources
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          scope: subscription
+          region: ${{ env.LOCATION }}
+          deploymentName:  ${{ env.DEPLOYMENT_NAME }}
+          template: ./bicep/main.json
+          parameters: location=${{ env.LOCATION }} resourceGroupName=${{ env.RG_NAME }} displayName=${{ secrets.OFFICE_ONLINE_ACCOUNT }}
+
+      - name: Update appsettings
+        run: |
+          ./updateAppSettings.ps1 -subscription ${{ secrets.AZURE_SUBSCRIPTION }} -resourceGroupName ${{ env.RG_NAME }} -logicAppName ${{ steps.createResources.outputs.logicAppName }} -workflowName IndexingCompleted
+        shell: pwsh
+        working-directory: ./scripts
+
+      - uses: gliech/create-github-secret-action@v1
+        name: Write Logic App Name
+        with:
+          name: LOGIC_APP_NAME
+          value: ${{ steps.createResources.outputs.logicAppName }}
+          pa_token: ${{ secrets.PA_TOKEN }}          
+

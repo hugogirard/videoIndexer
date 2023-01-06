@@ -1,0 +1,966 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Parse_JSON_first_video_content": {
+                "type": "ParseJson",
+                "inputs": {
+                    "content": "@triggerOutputs()?['body']?['contentData']",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "partition": {},
+                            "description": {
+                                "type": "string"
+                            },
+                            "privacyMode": {
+                                "type": "string"
+                            },
+                            "state": {
+                                "type": "string"
+                            },
+                            "accountId": {
+                                "type": "string"
+                            },
+                            "id": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "userName": {
+                                "type": "string"
+                            },
+                            "created": {
+                                "type": "string"
+                            },
+                            "isOwned": {
+                                "type": "boolean"
+                            },
+                            "isEditable": {
+                                "type": "boolean"
+                            },
+                            "isBase": {
+                                "type": "boolean"
+                            },
+                            "durationInSeconds": {
+                                "type": "integer"
+                            },
+                            "duration": {
+                                "type": "string"
+                            },
+                            "summarizedInsights": {},
+                            "videos": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "accountId": {
+                                            "type": "string"
+                                        },
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "state": {
+                                            "type": "string"
+                                        },
+                                        "moderationState": {
+                                            "type": "string"
+                                        },
+                                        "reviewState": {
+                                            "type": "string"
+                                        },
+                                        "privacyMode": {
+                                            "type": "string"
+                                        },
+                                        "processingProgress": {
+                                            "type": "string"
+                                        },
+                                        "failureCode": {
+                                            "type": "string"
+                                        },
+                                        "failureMessage": {
+                                            "type": "string"
+                                        },
+                                        "externalId": {},
+                                        "externalUrl": {},
+                                        "metadata": {},
+                                        "insights": {
+                                            "type": "object",
+                                            "properties": {
+                                                "version": {
+                                                    "type": "string"
+                                                },
+                                                "duration": {
+                                                    "type": "string"
+                                                },
+                                                "sourceLanguage": {},
+                                                "sourceLanguages": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "language": {},
+                                                "languages": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "transcript": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "text": {
+                                                                "type": "string"
+                                                            },
+                                                            "confidence": {
+                                                                "type": "number"
+                                                            },
+                                                            "speakerId": {
+                                                                "type": "integer"
+                                                            },
+                                                            "language": {
+                                                                "type": "string"
+                                                            },
+                                                            "instances": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "adjustedStart": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "adjustedEnd": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "start": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "end": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "adjustedStart",
+                                                                        "adjustedEnd",
+                                                                        "start",
+                                                                        "end"
+                                                                    ]
+                                                                }
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "id",
+                                                            "text",
+                                                            "confidence",
+                                                            "speakerId",
+                                                            "language",
+                                                            "instances"
+                                                        ]
+                                                    }
+                                                },
+                                                "keywords": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "text": {
+                                                                "type": "string"
+                                                            },
+                                                            "confidence": {
+                                                                "type": "number"
+                                                            },
+                                                            "language": {
+                                                                "type": "string"
+                                                            },
+                                                            "instances": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "adjustedStart": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "adjustedEnd": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "start": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "end": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "adjustedStart",
+                                                                        "adjustedEnd",
+                                                                        "start",
+                                                                        "end"
+                                                                    ]
+                                                                }
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "id",
+                                                            "text",
+                                                            "confidence",
+                                                            "language",
+                                                            "instances"
+                                                        ]
+                                                    }
+                                                },
+                                                "topics": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "referenceId": {
+                                                                "type": "string"
+                                                            },
+                                                            "fullName": {
+                                                                "type": "string"
+                                                            },
+                                                            "referenceType": {
+                                                                "type": "string"
+                                                            },
+                                                            "confidence": {
+                                                                "type": "number"
+                                                            },
+                                                            "iabName": {
+                                                                "type": "string"
+                                                            },
+                                                            "language": {
+                                                                "type": "string"
+                                                            },
+                                                            "instances": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "adjustedStart": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "adjustedEnd": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "start": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "end": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "adjustedStart",
+                                                                        "adjustedEnd",
+                                                                        "start",
+                                                                        "end"
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "referenceUrl": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "id",
+                                                            "name",
+                                                            "referenceId",
+                                                            "referenceType",
+                                                            "confidence",
+                                                            "iabName",
+                                                            "language",
+                                                            "instances"
+                                                        ]
+                                                    }
+                                                },
+                                                "namedLocations": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "referenceId": {},
+                                                            "referenceUrl": {},
+                                                            "description": {},
+                                                            "tags": {
+                                                                "type": "array"
+                                                            },
+                                                            "confidence": {
+                                                                "type": "number"
+                                                            },
+                                                            "isCustom": {
+                                                                "type": "boolean"
+                                                            },
+                                                            "instances": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "instanceSource": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "adjustedStart": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "adjustedEnd": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "start": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "end": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "instanceSource",
+                                                                        "adjustedStart",
+                                                                        "adjustedEnd",
+                                                                        "start",
+                                                                        "end"
+                                                                    ]
+                                                                }
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "id",
+                                                            "name",
+                                                            "referenceId",
+                                                            "referenceUrl",
+                                                            "description",
+                                                            "tags",
+                                                            "confidence",
+                                                            "isCustom",
+                                                            "instances"
+                                                        ]
+                                                    }
+                                                },
+                                                "namedPeople": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "referenceId": {},
+                                                            "referenceUrl": {},
+                                                            "description": {},
+                                                            "tags": {
+                                                                "type": "array"
+                                                            },
+                                                            "confidence": {
+                                                                "type": "number"
+                                                            },
+                                                            "isCustom": {
+                                                                "type": "boolean"
+                                                            },
+                                                            "instances": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "instanceSource": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "adjustedStart": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "adjustedEnd": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "start": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "end": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "instanceSource",
+                                                                        "adjustedStart",
+                                                                        "adjustedEnd",
+                                                                        "start",
+                                                                        "end"
+                                                                    ]
+                                                                }
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "id",
+                                                            "name",
+                                                            "referenceId",
+                                                            "referenceUrl",
+                                                            "description",
+                                                            "tags",
+                                                            "confidence",
+                                                            "isCustom",
+                                                            "instances"
+                                                        ]
+                                                    }
+                                                },
+                                                "audioEffects": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "type": {
+                                                                "type": "string"
+                                                            },
+                                                            "instances": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "confidence": {
+                                                                            "type": "integer"
+                                                                        },
+                                                                        "adjustedStart": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "adjustedEnd": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "start": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "end": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "confidence",
+                                                                        "adjustedStart",
+                                                                        "adjustedEnd",
+                                                                        "start",
+                                                                        "end"
+                                                                    ]
+                                                                }
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "id",
+                                                            "type",
+                                                            "instances"
+                                                        ]
+                                                    }
+                                                },
+                                                "sentiments": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "averageScore": {
+                                                                "type": "number"
+                                                            },
+                                                            "sentimentType": {
+                                                                "type": "string"
+                                                            },
+                                                            "instances": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "adjustedStart": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "adjustedEnd": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "start": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "end": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "adjustedStart",
+                                                                        "adjustedEnd",
+                                                                        "start",
+                                                                        "end"
+                                                                    ]
+                                                                }
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "id",
+                                                            "averageScore",
+                                                            "sentimentType",
+                                                            "instances"
+                                                        ]
+                                                    }
+                                                },
+                                                "emotions": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "type": {
+                                                                "type": "string"
+                                                            },
+                                                            "instances": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "confidence": {
+                                                                            "type": "number"
+                                                                        },
+                                                                        "adjustedStart": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "adjustedEnd": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "start": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "end": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "confidence",
+                                                                        "adjustedStart",
+                                                                        "adjustedEnd",
+                                                                        "start",
+                                                                        "end"
+                                                                    ]
+                                                                }
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "id",
+                                                            "type",
+                                                            "instances"
+                                                        ]
+                                                    }
+                                                },
+                                                "blocks": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "instances": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "adjustedStart": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "adjustedEnd": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "start": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "end": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "adjustedStart",
+                                                                        "adjustedEnd",
+                                                                        "start",
+                                                                        "end"
+                                                                    ]
+                                                                }
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "id",
+                                                            "instances"
+                                                        ]
+                                                    }
+                                                },
+                                                "speakers": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "instances": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "adjustedStart": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "adjustedEnd": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "start": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "end": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "adjustedStart",
+                                                                        "adjustedEnd",
+                                                                        "start",
+                                                                        "end"
+                                                                    ]
+                                                                }
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "id",
+                                                            "name",
+                                                            "instances"
+                                                        ]
+                                                    }
+                                                },
+                                                "textualContentModeration": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer"
+                                                        },
+                                                        "bannedWordsCount": {
+                                                            "type": "integer"
+                                                        },
+                                                        "bannedWordsRatio": {
+                                                            "type": "number"
+                                                        },
+                                                        "instances": {
+                                                            "type": "array"
+                                                        }
+                                                    }
+                                                },
+                                                "statistics": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "correspondenceCount": {
+                                                            "type": "integer"
+                                                        },
+                                                        "speakerTalkToListenRatio": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "1": {
+                                                                    "type": "number"
+                                                                },
+                                                                "2": {
+                                                                    "type": "number"
+                                                                },
+                                                                "3": {
+                                                                    "type": "number"
+                                                                },
+                                                                "4": {
+                                                                    "type": "number"
+                                                                },
+                                                                "5": {
+                                                                    "type": "number"
+                                                                }
+                                                            }
+                                                        },
+                                                        "speakerLongestMonolog": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "1": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "2": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "3": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "4": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "5": {
+                                                                    "type": "integer"
+                                                                }
+                                                            }
+                                                        },
+                                                        "speakerNumberOfFragments": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "1": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "2": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "3": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "4": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "5": {
+                                                                    "type": "integer"
+                                                                }
+                                                            }
+                                                        },
+                                                        "speakerWordCount": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "1": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "2": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "3": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "4": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "5": {
+                                                                    "type": "integer"
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                "sourceLanguageConfidence": {
+                                                    "type": "integer"
+                                                }
+                                            }
+                                        },
+                                        "thumbnailId": {
+                                            "type": "string"
+                                        },
+                                        "detectSourceLanguage": {
+                                            "type": "boolean"
+                                        },
+                                        "languageAutoDetectMode": {
+                                            "type": "string"
+                                        },
+                                        "sourceLanguage": {},
+                                        "sourceLanguages": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "language": {},
+                                        "languages": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "indexingPreset": {
+                                            "type": "string"
+                                        },
+                                        "linguisticModelId": {
+                                            "type": "string"
+                                        },
+                                        "personModelId": {
+                                            "type": "string"
+                                        },
+                                        "isAdult": {
+                                            "type": "boolean"
+                                        },
+                                        "publishedUrl": {
+                                            "type": "string"
+                                        },
+                                        "publishedProxyUrl": {},
+                                        "viewToken": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "accountId",
+                                        "id",
+                                        "state",
+                                        "moderationState",
+                                        "reviewState",
+                                        "privacyMode",
+                                        "processingProgress",
+                                        "failureCode",
+                                        "failureMessage",
+                                        "externalId",
+                                        "externalUrl",
+                                        "metadata",
+                                        "insights",
+                                        "thumbnailId",
+                                        "detectSourceLanguage",
+                                        "languageAutoDetectMode",
+                                        "sourceLanguage",
+                                        "sourceLanguages",
+                                        "language",
+                                        "languages",
+                                        "indexingPreset",
+                                        "linguisticModelId",
+                                        "personModelId",
+                                        "isAdult",
+                                        "publishedUrl",
+                                        "publishedProxyUrl",
+                                        "viewToken"
+                                    ]
+                                }
+                            },
+                            "videosRanges": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "videoId": {
+                                            "type": "string"
+                                        },
+                                        "range": {
+                                            "type": "object",
+                                            "properties": {
+                                                "start": {
+                                                    "type": "string"
+                                                },
+                                                "end": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "required": [
+                                        "videoId",
+                                        "range"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "runAfter": {}
+            },
+            "Populate_Microsoft_Word_template_transcription": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "referenceName": "wordonlinebusiness"
+                        }
+                    },
+                    "method": "post",
+                    "body": {
+                        "940878764": "@{body('Select_needed_elements')}@{body('Select_needed_elements')}@{body('Select_needed_elements')}@{body('Select_needed_elements')}@{body('Select_needed_elements')}@{body('Select_needed_elements')}"
+                    },
+                    "path": "/api/templates/getFile",
+                    "queries": {
+                        "source": "me",
+                        "drive": "b!5uOSMwdCWEOG55ZKclXYhKKad8ISIzVJjQBG2PoLwIuO7FpL9WCWQ6gnjzhINA4m",
+                        "file": "01MWOW7Y3GPQTWODJZTRCYON5ZL23HTWEF"
+                    }
+                },
+                "runAfter": {
+                    "For_each": [
+                        "Succeeded"
+                    ]
+                },
+                "metadata": {
+                    "01MWOW7Y3GPQTWODJZTRCYON5ZL23HTWEF": "/Template/TemplateTranscription.docx"
+                }
+            },
+            "Uploads_Word_Document_to_Azure_Storage": {
+                "type": "ServiceProvider",
+                "inputs": {
+                    "parameters": {
+                        "containerName": "transcript",
+                        "blobName": ".docx",
+                        "content": "@body('Populate_Microsoft_Word_template_transcription')"
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "AzureBlob",
+                        "operationId": "uploadBlob",
+                        "serviceProviderId": "/serviceProviders/AzureBlob"
+                    }
+                },
+                "runAfter": {
+                    "Populate_Microsoft_Word_template_transcription": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "For_each": {
+                "type": "Foreach",
+                "foreach": "@body('Parse_JSON_first_video_content')?['videos']",
+                "actions": {
+                    "Select_needed_elements": {
+                        "type": "Select",
+                        "inputs": {
+                            "from": "@items('For_each')?['insights']?['transcript']",
+                            "select": {
+                                "SpeakerId": "@item()?['speakerId']",
+                                "Text": "@item()?['text']"
+                            }
+                        },
+                        "runAfter": {}
+                    }
+                },
+                "runAfter": {
+                    "Parse_JSON_first_video_content": [
+                        "Succeeded"
+                    ]
+                }
+            }
+        },
+        "triggers": {
+            "When_messages_are_available_in_a_queue": {
+                "type": "ServiceProvider",
+                "inputs": {
+                    "parameters": {
+                        "queueName": "sbq-transcript",
+                        "isSessionsEnabled": false
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "serviceBus",
+                        "operationId": "receiveQueueMessages",
+                        "serviceProviderId": "/serviceProviders/serviceBus"
+                    }
+                },
+                "splitOn": "@triggerOutputs()?['body']"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {}
+    },
+    "kind": "Stateful"
+}
