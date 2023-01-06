@@ -179,6 +179,7 @@ module connectionRoleAssignement 'modules/role/connectionAssignement.bicep' = {
   params: {    
     logicAppSystemAssingedIdentityObjecId: logicApp.outputs.logicAppSystemAssingedIdentityObjecId  
     wordBusinessName: connectionWordOnline.outputs.wordBusinessName
+    location: location
   }
 }
 
