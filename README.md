@@ -47,8 +47,59 @@ Once the creation of the resources are done you can now run the next GitHub acti
 
 # Fix the connection for office 365
 
+You will need to fix the connection to office 365, for this go to the Azure Portal where all the resource where deployed.  
+
 # Upload your audio file into your Azure Storage
 
+The repository creates 3 Azure Storage, one for the Logic App, one needed for Video Indexer and the last one to save the transcription file and to upload the audio file.
 
+One of the storage has a Tags like this.
 
+![architecture](https://raw.githubusercontent.com/hugogirard/videoIndexer/main/images/tags.png)
+
+This storage contains 2 folder, one called **audio** and one called **transcript**.  Go to the **audio** folder and upload your audio file there.
+
+Now right click the 3 elipses to the right and select **Generate SAS**
+
+![architecture](https://raw.githubusercontent.com/hugogirard/videoIndexer/main/images/sas.png)
+
+Click the **Generate SAS Token** and Url button and copy **the Blob SAS Url** value
+
+# Find the URL to the Logic App Workflow
+
+Go to the Azure Portal where the Logic App is deployed, you will see 3 workflows.
+
+![architecture](https://raw.githubusercontent.com/hugogirard/videoIndexer/main/images/workflows.png)
+
+Click on the IndexAudio one, copy the **Workflow URL**
+
+![architecture](https://raw.githubusercontent.com/hugogirard/videoIndexer/main/images/workflowurl.png)
+
+# Open Postman
+
+Now you need to do an HTTP request to the Logic App, in this example we are using Postman but any other tools will work.
+
+![architecture](https://raw.githubusercontent.com/hugogirard/videoIndexer/main/images/workflowurl.png)
+
+The two important fields here are language and videoUrl, if the audio file contains multiple language you can leverage the preview feature, in this case the value will be **multi**.
+
+To see the list of language supported refer to the [API reference](https://api-portal.videoindexer.ai/api-details#api=Operations&operation=Upload-Video)
+
+For the **videoUrl** is the SAS of the blob copied before.
+
+Now just send the POST request and wait the indexing to be completed
+
+# See the progress of the indexing
+
+You can see the progress of the indexing of the audio file by going to the **Video Indexer portal**.  To do so, just go to the Azure Video Indexer created by the repository and click the Video Indexer portal.
+
+Be sure to select the good resource in the Video Indexer Portal by clicking the icon in the top menu.  You need to be sure to not select the trial version and the proper resource created before.
+
+![architecture](https://raw.githubusercontent.com/hugogirard/videoIndexer/main/images/selectindexer.png)
+
+![architecture](https://raw.githubusercontent.com/hugogirard/videoIndexer/main/images/indexing.png)
+
+Once is completed, the workflow IndexingCompleted will be called, this one will save the transcription into CosmosDB and insert it to Azure Service Bus.
+
+The ConvertToWord workflow will get the message from the queue and convert the JSON into a word document.
 

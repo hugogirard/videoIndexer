@@ -55,6 +55,17 @@ module containerDocument 'modules/storage/container.bicep' = {
   }
 }
 
+
+module containerAudio 'modules/storage/container.bicep' = {
+  scope: resourceGroup(rg.name)
+  name: 'containerAudio'
+  params: {
+    containerName: 'audio'
+    storageName: storageDocument.outputs.storageName
+  }
+}
+
+
 module storageLogicApp 'modules/storage/storage.bicep' = {
   scope: resourceGroup(rg.name)
   name: 'storageLogicApp'
@@ -64,15 +75,6 @@ module storageLogicApp 'modules/storage/storage.bicep' = {
     tags: {
       description: 'Logic App Storage'
     }
-  }
-}
-
-module containerAudio 'modules/storage/container.bicep' = {
-  scope: resourceGroup(rg.name)
-  name: 'containerAudio'
-  params: {
-    containerName: 'audio'
-    storageName: storageLogicApp.outputs.storageName
   }
 }
 

@@ -2,11 +2,6 @@ name: Deploy Logic App
 
 on:
   workflow_dispatch:
-  
-  push:
-    paths:
-      - "src/**"
-      - ".github/workflows/deployLogicApp.yml"
 
 env:
   RG_NAME: ${{ secrets.RESOURCE_GROUP_NAME }}
