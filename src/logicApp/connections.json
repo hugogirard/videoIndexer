@@ -9,20 +9,6 @@
       },
       "connectionRuntimeUrl": "@appsetting('wordonlinebusiness_connection_url')",
       "authentication": "@parameters('word_auth')"
-    },
-    "wordonlinebusiness_1": {
-      "api": {
-        "id": "/subscriptions/abd9e36a-555c-4de4-a75d-cfc1682d67b0/providers/Microsoft.Web/locations/eastus/managedApis/wordonlinebusiness"
-      },
-      "connection": {
-        "id": "/subscriptions/abd9e36a-555c-4de4-a75d-cfc1682d67b0/resourceGroups/rg-videoindexer-demo/providers/Microsoft.Web/connections/wordonlinebusiness"
-      },
-      "connectionRuntimeUrl": "https://ee283397ffc88335.09.common.logic-eastus.azure-apihub.net/apim/wordonlinebusiness/b1d831871fe0424cb9c5f2d67cf767e2/",
-      "authentication": {
-        "type": "Raw",
-        "scheme": "Key",
-        "parameter": "@appsetting('wordonlinebusiness_1-connectionKey')"
-      }
     }
   },
   "serviceProviderConnections": {

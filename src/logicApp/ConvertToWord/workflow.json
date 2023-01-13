@@ -342,7 +342,7 @@
                 "inputs": {
                     "host": {
                         "connection": {
-                            "referenceName": "wordonlinebusiness_1"
+                            "referenceName": "wordonlinebusiness"
                         }
                     },
                     "method": "post",
