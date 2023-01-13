@@ -284,20 +284,7 @@
                             "content": "@body('Get_video_Insights')",
                             "schema": {
                                 "properties": {
-                                    "summarizedInsights": {
-                                        "properties": {
-                                            "duration": {
-                                                "properties": {
-                                                    "seconds": {
-                                                        "type": "integer"
-                                                    },
-                                                    "time": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        },
+                                    "summarizedInsights": {    
                                         "type": "object"
                                     },
                                     "videos": {
