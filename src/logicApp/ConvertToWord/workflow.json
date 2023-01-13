@@ -204,41 +204,13 @@
                 },
                 "runAfter": {}
             },
-            "Populate_Microsoft_Word_template_transcription": {
-                "type": "ApiConnection",
-                "inputs": {
-                    "host": {
-                        "connection": {
-                            "referenceName": "wordonlinebusiness"
-                        }
-                    },
-                    "method": "post",
-                    "body": {
-                        "940878764": "@{body('Select_needed_elements')}@{body('Select_needed_elements')}@{body('Select_needed_elements')}@{body('Select_needed_elements')}@{body('Select_needed_elements')}@{body('Select_needed_elements')}@{body('Select_needed_elements')}"
-                    },
-                    "path": "/api/templates/getFile",
-                    "queries": {
-                        "source": "me",
-                        "drive": "b!5uOSMwdCWEOG55ZKclXYhKKad8ISIzVJjQBG2PoLwIuO7FpL9WCWQ6gnjzhINA4m",
-                        "file": "01MWOW7Y3GPQTWODJZTRCYON5ZL23HTWEF"
-                    }
-                },
-                "runAfter": {
-                    "Select_needed_elements": [
-                        "Succeeded"
-                    ]
-                },
-                "metadata": {
-                    "01MWOW7Y3GPQTWODJZTRCYON5ZL23HTWEF": "/Template/TemplateTranscription.docx"
-                }
-            },
             "Uploads_Word_Document_to_Azure_Storage": {
                 "type": "ServiceProvider",
                 "inputs": {
                     "parameters": {
                         "containerName": "transcript",
                         "blobName": "@{body('Parse_JSON_queue_message')?['name']}.docx",
-                        "content": "@body('Populate_Microsoft_Word_template_transcription')"
+                        "content": "@body('Populate_a_Microsoft_Word_template')"
                     },
                     "serviceProviderConfiguration": {
                         "connectionName": "AzureBlob",
@@ -247,7 +219,7 @@
                     }
                 },
                 "runAfter": {
-                    "Populate_Microsoft_Word_template_transcription": [
+                    "Populate_a_Microsoft_Word_template": [
                         "Succeeded"
                     ]
                 }
@@ -363,6 +335,34 @@
                     "Parse_JSON_first_video": [
                         "Succeeded"
                     ]
+                }
+            },
+            "Populate_a_Microsoft_Word_template": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "referenceName": "wordonlinebusiness_1"
+                        }
+                    },
+                    "method": "post",
+                    "body": {
+                        "-1737392662": "@body('Select_needed_elements')"
+                    },
+                    "path": "/api/templates/getFile",
+                    "queries": {
+                        "source": "me",
+                        "drive": "b!5uOSMwdCWEOG55ZKclXYhKKad8ISIzVJjQBG2PoLwIuO7FpL9WCWQ6gnjzhINA4m",
+                        "file": "01MWOW7Y3GPQTWODJZTRCYON5ZL23HTWEF"
+                    }
+                },
+                "runAfter": {
+                    "Select_needed_elements": [
+                        "Succeeded"
+                    ]
+                },
+                "metadata": {
+                    "01MWOW7Y3GPQTWODJZTRCYON5ZL23HTWEF": "/Template/TemplateTranscription.docx"
                 }
             }
         },
