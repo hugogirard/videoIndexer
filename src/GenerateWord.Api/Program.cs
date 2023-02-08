@@ -44,7 +44,7 @@ app.MapPost("/api/generate/{filename}", async (IStorageService storageService, I
 
     File.Delete(documentGenerator.TemporaryFilename);
 
-    return transcription;
+    return new GenerateFileViewModel(wordDocumentName, transcription);    
 })
 .WithName("GenerateWordDocument")
 .WithOpenApi();
