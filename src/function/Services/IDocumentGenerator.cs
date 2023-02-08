@@ -6,5 +6,8 @@ public interface IDocumentGenerator
     void CreateTable();
     void Save();
     void SaveTable();
+
+    string TemporaryFilename {get;}
+
     Stream GetDocumentStream();
 }

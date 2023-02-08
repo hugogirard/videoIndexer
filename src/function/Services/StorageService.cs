@@ -22,4 +22,11 @@ public class StorageService : IStorageService
 
         await blobClient.UploadAsync(fileStream, true);
     }
+
+    public async Task UploadFileAsync(string fileName, string filepath)
+    {
+        BlobClient blobClient = _containerClient.GetBlobClient(fileName);
+
+        await blobClient.UploadAsync(filepath, true);
+    }
 }

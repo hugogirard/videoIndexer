@@ -1,0 +1,5 @@
+{
+    "appService.preDeployTask": "publish-release",
+    "appService.deploySubpath": "bin\\Release\\net7.0\\publish",
+    "appService.defaultWebAppToDeploy": "/subscriptions/334989ef-8b95-480f-b7e3-8b8800740222/AppServices/subscriptions/334989ef-8b95-480f-b7e3-8b8800740222/resourceGroups/rg-transcript-video-indexer/providers/Microsoft.Web/sites/tmplweb"
+}

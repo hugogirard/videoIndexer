@@ -22,8 +22,8 @@ namespace Contoso
         }
 
         [Function("GenerateTemplate")]
-        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = "generate/{filename}")] HttpRequestData req, string filename,
-                                                [BlobInput("transcription/{filename}")] string myBlob)
+        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = "generate/{container}/{filename}")] HttpRequestData req, string filename,
+                                                [BlobInput("{container}/{filename}", Connection = "StorageConnectionString")] string myBlob)
         {
 
             try

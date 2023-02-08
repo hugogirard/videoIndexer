@@ -13,10 +13,15 @@ namespace Contoso;
 public class DocumentGenerator : IDocumentGenerator
 {
     private MemoryStream _ms;    
+
+    private MemoryStream _documentInMemory;
+
     private readonly WordprocessingDocument _document;
     private readonly Table _table;
     private string _filename;
     private readonly ILogger<DocumentGenerator> _logger;
+
+    public string TemporaryFilename => _filename;
 
     public DocumentGenerator(ILoggerFactory loggerFactory)
     {
@@ -26,11 +31,14 @@ public class DocumentGenerator : IDocumentGenerator
         _logger.LogInformation($"Temp document name: {_filename}");
 
         //_document = WordprocessingDocument.Create(_filename, WordprocessingDocumentType.Document, true);
+        byte[] templateBytes = System.IO.File.ReadAllBytes("dummy.docx");
         _ms = new MemoryStream();
-        _document = WordprocessingDocument.Create(_ms, WordprocessingDocumentType.Document, true);    
-        MainDocumentPart mainPart = _document.AddMainDocumentPart();
-        mainPart.Document = new Document();
-        mainPart.Document.AppendChild(new Body());
+        _ms.Write(templateBytes, 0, (int)templateBytes.Length);
+        _document = WordprocessingDocument.Open(_ms, true);    
+        //_document = WordprocessingDocument.Create(_ms, WordprocessingDocumentType.Document, true);    
+         MainDocumentPart mainPart = _document.AddMainDocumentPart();
+         mainPart.Document = new Document();
+         mainPart.Document.AppendChild(new Body());
         _table = new Table();
     }
 
@@ -136,8 +144,12 @@ public class DocumentGenerator : IDocumentGenerator
     }
 
     public Stream GetDocumentStream()
-    {        
-        return _document.MainDocumentPart.GetStream();
+    {          
+        _ms.Position = 0;
+         _documentInMemory = new MemoryStream();
+         _ms.CopyTo(_documentInMemory);
+         return _documentInMemory;
+        //return _document.MainDocumentPart.GetStream();
     }
 
     public void SaveTable()
@@ -146,8 +158,9 @@ public class DocumentGenerator : IDocumentGenerator
     }
 
     public void Save()
-    {
-        _document.Save();               
+    {     
+        _document.MainDocumentPart.Document.Save();
+        //_document.Save();               
         //_document.Close();
     }
 

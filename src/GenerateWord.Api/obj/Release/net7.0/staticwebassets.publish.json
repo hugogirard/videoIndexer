@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "ZJPEBiwCKhENHwOjpRsyHQTyEIb5JZkIVgUlC0Yvh3Y=",
+  "Source": "GenerateWord.Api",
+  "BasePath": "_content/GenerateWord.Api",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
